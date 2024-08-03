@@ -1,22 +1,27 @@
 import random
 
 
-def coin_flip():
+def coinflip():
     if random.randint(0, 1) == 0:
         return "heads"
     else:
         return "tails"
 
 
-heads_tally = 0
-tails_tally = 0
+flipcount = 0
+NUMBER_TRIALS = 10_000
 
-for trial in range(10_000):
-    if coin_flip() == "heads":
-        heads_tally = heads_tally + 1
+for trial in range(NUMBER_TRIALS):
+    if coinflip() == "heads":
+        flipcount = flipcount+1
+        while coinflip() == "heads":
+            flipcount = flipcount + 1
+        flipcount = flipcount + 1
     else:
-        tails_tally = tails_tally + 1
+        flipcount = flipcount + 1
+        while coinflip() == "tails":
+            flipcount = flipcount + 1
+        flipcount = flipcount + 1
 
-
-ratio = heads_tally / tails_tally
-print(f"The ratio of heads to tails is {ratio:.2f}")
+averageflips = flipcount / NUMBER_TRIALS
+print(f"The average number of flips per trial is {averageflips}")
