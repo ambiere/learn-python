@@ -1,21 +1,21 @@
 print("Track Your Investments\n")
 
-prompt_years = "Enter investment years: "
-prompt_amount = "Enter a principal amount ($): "
-prompt_rate = "Enter annual rate of return (float/integer): "
+PROMPT_YEARS = "Enter investment years: "
+PROMPT_AMOUNT = "Enter a principal amount ($): "
+PROMPT_RATE = "Enter annual rate of return (float/integer): "
 
 
 def invest(amount, rate):
-    rate_not_none = rate is not None
-    amount_not_none = amount is not None
+    ratevalid = rate is not None
+    amountvalid = amount is not None
 
-    if rate_not_none and amount_not_none:
+    if ratevalid and amountvalid:
         return amount + amount * rate
     else:
         print("Invalid amount or rate :/")
 
 
-def parse_input(str):
+def parseinput(str):
     str = str.strip()
     try:
         return int(str)
@@ -27,45 +27,37 @@ def parse_input(str):
             exit(1)
 
 
-def handle_float_years(parsed_years, years):
-    if parsed_years.is_integer():
-        return {
-            "whole_year": parsed_years,
-            "float_year": 0
-        }
+def floatyears(parsedyear, years):
+    if parsedyear.is_integer():
+        return (parsedyear, 0)
     else:
-        whole_year = years.split(".")[0]
-        float_year = years.split(".")[1]
-        return {
-            "whole_year": parse_input(whole_year),
-            "float_year":  parse_input(f".{float_year}")
-        }
+        whole = years.split(".")[0]
+        float = years.split(".")[1]
+        return (
+            parseinput(whole),
+            parseinput(f".{float}")
+        )
 
 
-def print_accumulation(amount, rate, years_dict):
-    whole_year = years_dict["whole_year"]
-    float_year = years_dict["float_year"]
+def printgrowth(amount, rate, years):
+    whole, float = years
 
-    for year in range(1, whole_year + 1):
+    for year in range(1, whole + 1):
         amount = invest(amount, rate)
         print(f"year {year}: ${amount:,.2f}")
 
     # if the year provided is not whole number
-    if float_year > 0:
-        incremented_amount = invest(amount, rate) - amount
-        amount = amount + (incremented_amount * float_year)
-        print(f"year {whole_year + float_year}: ${amount:,.2f}")
+    if float > 0:
+        amountinc = invest(amount, rate) - amount
+        amount = amount + (amountinc * float)
+        print(f"year {whole + float}: ${amount:,.2f}")
 
 
-amount = input(prompt_amount)
-rate = input(prompt_rate)
-years = input(prompt_years)
+amount = parseinput(input(PROMPT_AMOUNT))
+rate = parseinput(input(PROMPT_RATE))
+years = input(PROMPT_YEARS)
 
-rate = parse_input(rate)
-amount = parse_input(amount)
-parsed_years = parse_input(years)
+parsedyear = parseinput(years)
+years = floatyears(parsedyear, years)
 
-years = handle_float_years(parsed_years, years)
-
-
-print_accumulation(amount, rate, years)
+printgrowth(amount, rate, years)
