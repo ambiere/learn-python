@@ -4,7 +4,7 @@ prompt = "Enter a positive integer: "
 integer = input(prompt)
 
 
-def parse_input(str):
+def parseinput(str):
     try:
         return int(str)
     except ValueError:
@@ -12,13 +12,10 @@ def parse_input(str):
         exit(1)
 
 
-integer = parse_input(integer)
+integer = parseinput(integer)
 
 print("")
 
 for factor in range(1, integer+1):
-    has_reminder = integer % factor
-    if has_reminder > 0:
-        continue
-    else:
+    if integer % factor == 0:
         print(f"{factor} is a factor of {integer}")
